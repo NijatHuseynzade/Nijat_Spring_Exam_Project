@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Покупка компьютеров</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center">Доступные компьютеры</h2>
+        
+        <div class="row">
+            <div th:each="computer : ${computers}" class="col-md-4">
+                <div class="card mb-4">
+                    <img th:src="@{'/images/' + ${computer.image}}" class="card-img-top" alt="Компьютер">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${computer.name}"></h5>
+                        <p class="card-text">Цена: <span th:text="${computer.price}"></span> $</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" th:data-bs-target="'#detailsModal' + ${computer.id}">Больше</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <a href="/" class="btn btn-secondary">Главное меню</a>
+    </div>
+
+    <!-- Модальные окна для характеристик -->
+    <div th:each="computer : ${computers}">
+        <div class="modal fade" th:id="'detailsModal' + ${computer.id}" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" th:text="${computer.name}"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img th:src="@{'/images/' + ${computer.image}}" class="img-fluid">
+                        <p><strong>Цена:</strong> <span th:text="${computer.price}"></span> $</p>
+                        <p><strong>Характеристики:</strong> <span th:text="${computer.specs}"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

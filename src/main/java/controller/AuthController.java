@@ -32,7 +32,7 @@ public class AuthController {
         Optional<User> existingUser = userService.findByUsername(user.getUsername());
 
         if (existingUser.isPresent()) {
-            String token = jwtUtil.generateToken(user.getUsername());
+			String token = jwtUtil.generateToken(user.getUsername());
             return "Bearer " + token;
         } else {
             return "Ошибка: пользователь не найден";

@@ -4,6 +4,8 @@ import model.Computer;
 import repository.ComputerRepository;
 import service.ComputerService;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,4 +37,24 @@ public class ComputerController {
         computerRepository.deleteById(id);
         return "redirect:/my-computers";
     }
+    
+    @PostMapping("/edit")
+    public String editComputer(@RequestParam Long id, @RequestParam String name, 
+                               @RequestParam String image, @RequestParam double price) {
+        Computer computer = computerRepository.findById(id).orElseThrow();
+        computer.setName(name);
+        computer.setImage(image);
+        computer.setPrice(price);
+        computerRepository.save(computer);
+        return "redirect:/my-computers";
+    }
+    
+    @GetMapping("/buy-computers")
+    public String showBuyComputersPage(Model model) {
+        List<Computer> computers = computerRepository.findAll();
+        model.addAttribute("computers", computers);
+        return "buy-computers";
+    }
+
+
 }

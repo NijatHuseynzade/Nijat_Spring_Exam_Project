@@ -8,11 +8,15 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Computer {
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     private String name;
     private String image;
     private double price;
+    
+    @Column(nullable = false)
+    private String specs;
+
 }
