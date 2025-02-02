@@ -4,11 +4,14 @@ import model.Computer;
 import repository.ComputerRepository;
 import service.ComputerService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/my-computers")
@@ -56,5 +59,36 @@ public class ComputerController {
         return "buy-computers";
     }
 
+    @GetMapping("/cart")
+    public String showCart(HttpSession session, Model model) {
+        List<Computer> cart = (List<Computer>) session.getAttribute("cart");
+        if (cart == null) {
+            cart = new ArrayList<>();
+        }
+        model.addAttribute("cart", cart);
+        return "cart";
+    }
+
+    @PostMapping("/cart/add")
+    public String addToCart(@RequestParam Long id, HttpSession session) {
+        List<Computer> cart = (List<Computer>) session.getAttribute("cart");
+        if (cart == null) {
+            cart = new ArrayList<>();
+        }
+        Computer computer = computerRepository.findById(id).orElseThrow();
+        cart.add(computer);
+        session.setAttribute("cart", cart);
+        return "redirect:/buy-computers";
+    }
+
+    @PostMapping("/cart/remove")
+    public String removeFromCart(@RequestParam Long id, HttpSession session) {
+        List<Computer> cart = (List<Computer>) session.getAttribute("cart");
+        if (cart != null) {
+            cart.removeIf(computer -> computer.getId().equals(id));
+        }
+        session.setAttribute("cart", cart);
+        return "redirect:/cart";
+    }
 
 }

@@ -18,6 +18,11 @@
                         <h5 class="card-title" th:text="${computer.name}"></h5>
                         <p class="card-text">Цена: <span th:text="${computer.price}"></span> $</p>
                         <button class="btn btn-primary" data-bs-toggle="modal" th:data-bs-target="'#detailsModal' + ${computer.id}">Больше</button>
+                        <form method="post" action="/cart/add">
+					    <input type="hidden" name="id" th:value="${computer.id}">
+					    <button type="submit" class="btn btn-success">Добавить в корзину</button>
+						</form>
+
                     </div>
                 </div>
             </div>
