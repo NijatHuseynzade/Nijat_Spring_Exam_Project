@@ -1,39 +1,38 @@
 package controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import model.Computer;
+import repository.ComputerRepository;
 import service.ComputerService;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/computers")
+@Controller
+@RequestMapping("/my-computers")
 public class ComputerController {
 
-    @Autowired
-    private ComputerService computerService;
+    private final ComputerRepository computerRepository;
+
+    public ComputerController(ComputerRepository computerRepository) {
+        this.computerRepository = computerRepository;
+    }
 
     @GetMapping
-    public List<Computer> getAllComputers() {
-        return computerService.getAllComputers();
+    public String myComputers(Model model) {
+        model.addAttribute("computers", computerRepository.findAll());
+        return "my-computers";
     }
 
-    @GetMapping("/{id}")
-    public Optional<Computer> getComputerById(@PathVariable Long id) {
-        return computerService.getComputerById(id);
+    @PostMapping("/add")
+    public String addComputer(@RequestParam String name, @RequestParam String image, @RequestParam double price) {
+        computerRepository.save(new Computer(null, name, image, price));
+        return "redirect:/my-computers";
     }
 
-    @PostMapping
-    public Computer addComputer(@RequestBody Computer computer) {
-        return computerService.saveComputer(computer);
-    }
-
-    @DeleteMapping("/{id}")
+    @GetMapping("/delete/{id}")
     public String deleteComputer(@PathVariable Long id) {
-        computerService.deleteComputer(id);
-        return "Компьютер удалён!";
+        computerRepository.deleteById(id);
+        return "redirect:/my-computers";
     }
 }

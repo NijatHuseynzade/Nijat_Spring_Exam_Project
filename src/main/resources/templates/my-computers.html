@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Мои компьютеры</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <div class="container mt-4">
+        <h2 class="text-center">Мои компьютеры</h2>
+
+        <!-- Кнопки управления -->
+        <div class="d-flex justify-content-between mb-3">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addComputerModal">Добавить компьютер</button>
+            <a href="/main" class="btn btn-primary">Главное меню</a>
+        </div>
+
+        <!-- Таблица с компьютерами -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Название</th>
+                    <th>Картинка</th>
+                    <th>Цена</th>
+                    <th>Взаимодействие</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="computer : ${computers}">
+                    <td th:text="${computer.id}"></td>
+                    <td th:text="${computer.name}"></td>
+                    <td><img th:src="@{/img/{img}(img=${computer.image})}" width="100"></td>
+                    <td th:text="${computer.price} + ' $'"></td>
+                    <td>
+                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editComputerModal" 
+                                th:attr="data-id=${computer.id}, data-name=${computer.name}, 
+                                         data-image=${computer.image}, data-price=${computer.price}">
+                            Редактировать
+                        </button>
+                        <a th:href="@{/my-computers/delete/{id}(id=${computer.id})}" class="btn btn-danger">Удалить</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Модальное окно для добавления -->
+    <div class="modal fade" id="addComputerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Добавить компьютер</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/my-computers/add}" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Название</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Изображение (название файла)</label>
+                            <input type="text" class="form-control" name="image" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Цена ($)</label>
+                            <input type="number" class="form-control" name="price" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Добавить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
