@@ -1,12 +1,15 @@
 package controller;
 
 import model.Computer;
+import model.Order;
 import repository.ComputerRepository;
+import repository.OrderRepository;
 import service.ComputerService;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -90,5 +93,40 @@ public class ComputerController {
         session.setAttribute("cart", cart);
         return "redirect:/cart";
     }
+    
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @PostMapping("/order")
+    public String placeOrder(@RequestParam String customerName, 
+                             @RequestParam String email, 
+                             @RequestParam String address, 
+                             HttpSession session) {
+        List<Computer> cart = (List<Computer>) session.getAttribute("cart");
+        if (cart == null || cart.isEmpty()) {
+            return "redirect:/cart?error=empty";
+        }
+
+        Order order = new Order();
+        order.setCustomerName(customerName);
+        order.setEmail(email);
+        order.setAddress(address);
+        order.setComputers(cart);
+        
+        double totalPrice = cart.stream().mapToDouble(Computer::getPrice).sum();
+        order.setTotalPrice(totalPrice);
+
+        orderRepository.save(order);
+
+        session.removeAttribute("cart"); // Очистка корзины после заказа
+        return "redirect:/order-success";
+    }
+    
+    @GetMapping("/order-success")
+    public String orderSuccess() {
+        return "order-success";
+    }
+
+
 
 }

@@ -9,7 +9,27 @@
 <body>
     <div class="container mt-4">
         <h2 class="text-center">Ваша корзина</h2>
-        
+	        <form method="post" action="/order" class="mt-4">
+	    <h4>Оформить заказ</h4>
+	    
+	    <div class="mb-2">
+	        <label>Имя:</label>
+	        <input type="text" name="customerName" class="form-control" required>
+	    </div>
+	
+	    <div class="mb-2">
+	        <label>Email:</label>
+	        <input type="email" name="email" class="form-control" required>
+	    </div>
+	
+	    <div class="mb-2">
+	        <label>Адрес:</label>
+	        <input type="text" name="address" class="form-control" required>
+	    </div>
+	
+	    <button type="submit" class="btn btn-success">Оформить заказ</button>
+	</form>
+
         <table class="table">
             <thead>
                 <tr>
