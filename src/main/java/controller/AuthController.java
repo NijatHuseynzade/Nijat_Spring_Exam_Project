@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import model.User;
+import security.JwtUtil;
 import service.UserService;
 
 @RestController
@@ -30,19 +31,20 @@ public class AuthController {
     @PostMapping("/login")
     public String loginUser(@RequestBody User user) {
         Optional<User> existingUser = userService.findByUsername(user.getUsername());
-
         if (existingUser.isPresent()) {
-			String token = jwtUtil.generateToken(user.getUsername());
+			String token = null;
+			try {
+				token = JwtUtil.generateToken(user.getUsername());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
             return "Bearer " + token;
         } else {
             return "Ошибка: пользователь не найден";
         }
     }
-   
     @PostMapping("/auth/login")
     public String login() {
         return "redirect:/main";
     }
-
-
 }

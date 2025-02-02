@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 import model.Computer;
 
 @Repository
-public interface ComputerRepository extends JpaRepository<Computer, Long> {
-	
-}
+public interface ComputerRepository extends JpaRepository<Computer, Long> {}

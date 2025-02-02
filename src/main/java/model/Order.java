@@ -25,4 +25,11 @@ public class Order {
     private List<Computer> computers;
 
     private double totalPrice;
+    
+    public void setAddress(String address) { this.address = address; }
+    public void setCustomerName(String customerName) { this.customerName = customerName; }
+    public void setEmail(String email) { this.email = email; }
+    public void setComputers(List<Computer> computers) { this.computers = computers; }
+    public void setTotalPrice(double totalPrice) { this.totalPrice = totalPrice; }
+
 }
