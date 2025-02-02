@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +26,17 @@ public class AuthController {
         userService.saveUser(user);
         return "Регистрация успешна!";
     }
-
+    
     @PostMapping("/login")
     public String loginUser(@RequestBody User user) {
-        return "Функция логина будет добавлена позже!";
+        Optional<User> existingUser = userService.findByUsername(user.getUsername());
+
+        if (existingUser.isPresent()) {
+            String token = jwtUtil.generateToken(user.getUsername());
+            return "Bearer " + token;
+        } else {
+            return "Ошибка: пользователь не найден";
+        }
     }
+
 }
