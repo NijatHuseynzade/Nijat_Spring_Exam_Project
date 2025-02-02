@@ -38,5 +38,11 @@ public class AuthController {
             return "Ошибка: пользователь не найден";
         }
     }
+   
+    @PostMapping("/auth/login")
+    public String login() {
+        return "redirect:/main";
+    }
+
 
 }
